@@ -263,10 +263,10 @@ function hcl_nodes(hcl; useheight = false)
     nleaves = length(hcl.order)
     nodes = [DNode(i, Point2d(x, 0), nothing) for (i, x) in enumerate(invperm(hcl.order))]
 
-    for (m1, m2) in eachrow(hcl.merges)
+    for ((m1, m2), height) in zip(eachrow(hcl.merges), hcl.heights)
         m1 = ifelse(m1 < 0, -m1, m1 + nleaves)
         m2 = ifelse(m2 < 0, -m2, m2 + nleaves)
-        push!(nodes, find_merge(nodes[m1], nodes[m2]; index = length(nodes) + 1))
+        push!(nodes, find_merge(nodes[m1], nodes[m2]; height = ifelse(useheight, height, 1), index = length(nodes) + 1))
     end
 
     return nodes
